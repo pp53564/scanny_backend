@@ -6,7 +6,7 @@ import project.scanny.requests.user.CreateUserRequest;
 
 public class UserMapper {
     public static UserDTO userToDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword());
+        return new UserDTO(user.getId(), user.getUsername());
     }
 
     public static User createRequestToUser(CreateUserRequest createUserRequest) {
