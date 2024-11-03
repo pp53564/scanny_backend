@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba6f76a7-7014-4742-9c60-0c69dc419ad8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/UtilConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/AuthFailureHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/AuthSuccessHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/AuthenticationToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application-dev.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/JwtTokenUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/controllers/SomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/project/scanny/dto/AuthenticationResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" afterDir="false" />
@@ -18,18 +20,24 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/53c69dd5-4393-4d13-a7c8-c14e01e3eff4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/53c69dd5-4393-4d13-a7c8-c14e01e3eff4.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/53c69dd5-4393-4d13-a7c8-c14e01e3eff4/storage_v2/_src_/database/scanny.CCneyQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/53c69dd5-4393-4d13-a7c8-c14e01e3eff4/storage_v2/_src_/database/scanny.CCneyQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/project/scanny/configuration/auth/AuthFailureHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/project/scanny/configuration/auth/AuthSuccessHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/project/scanny/configuration/auth/AuthenticationToken.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/project/scanny/configuration/security/SecurityConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/project/scanny/configuration/security/SecurityConfiguration.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/project/scanny/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/project/scanny/controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/project/scanny/models/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/project/scanny/models/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/UserController.class.uniqueId2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/UserDTO.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/UserMapper.class.uniqueId1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/AuthFailureHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/AuthSuccessHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/auth/AuthenticationToken.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/security/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/configuration/security/SecurityConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/dao/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/dao/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/dto/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/mappers/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/mappers/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/services/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/services/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/services/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/project/scanny/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/project/scanny/models/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +103,7 @@
     &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
     &quot;Gradle.Build scann_be.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build scanny_be.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
     &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
     &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
     &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
@@ -177,7 +186,9 @@
       <workItem from="1730032368613" duration="765000" />
       <workItem from="1730033234866" duration="2946000" />
       <workItem from="1730319280969" duration="4068000" />
-      <workItem from="1730475172383" duration="5121000" />
+      <workItem from="1730475172383" duration="5244000" />
+      <workItem from="1730569713020" duration="5066000" />
+      <workItem from="1730633237971" duration="327000" />
     </task>
     <servers />
   </component>

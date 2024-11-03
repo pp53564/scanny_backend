@@ -2,10 +2,13 @@ package project.scanny.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.scanny.configuration.auth.JwtTokenUtil;
+import project.scanny.dto.AuthenticationResponse;
 import project.scanny.dto.UserDTO;
 import project.scanny.mappers.UserMapper;
 import project.scanny.models.User;
@@ -17,23 +20,25 @@ import project.scanny.services.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
-
-//    @PostMapping
-//    public UserDTO createOrLoginUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-//       return UserMapper.userToDTO(userService.createUser(UserMapper.createRequestToUser(createUserRequest)));
-//    }
 
     @PostMapping
-    public UserDTO createOrLoginUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public AuthenticationResponse createOrLoginUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         User user = UserMapper.createRequestToUser(createUserRequest);
-        User loggedInUser = userService.createOrLoginUser(user);
-        return UserMapper.userToDTO(loggedInUser);
+        try {
+            User loggedInUser = userService.createOrLoginUser(user);
+            String token = jwtTokenUtil.generateToken(loggedInUser.getUsername());
+            return new AuthenticationResponse(token);
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
     }
-
 
 }
