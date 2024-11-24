@@ -1,0 +1,41 @@
+# Ignore build output
+/build/
+!/build.gradle
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/logs/
+
+# Generated files
+*.class
+*.jar
+*.war
+*.ear
+
+# Temporary files
+*.tmp
+*.swp
+
+# Gradle files
+.gradle/
+!gradle-wrapper.jar
+
+# Exclude specific directories
+out/
+bin/
+target/
