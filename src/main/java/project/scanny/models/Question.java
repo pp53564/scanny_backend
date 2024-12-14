@@ -17,9 +17,6 @@ public class Question {
     @Column(nullable = false)
     private String subject;
 
-    @Column(name = "correct_image_path", nullable = false)
-    private String correctImagePath;
-
     @ManyToOne
     @JoinColumn(name = "lecture_id", nullable = false)
     @JsonBackReference
@@ -31,9 +28,8 @@ public class Question {
 
     public Question() {}
 
-    public Question(String subject, String correctImagePath, Lecture lecture) {
+    public Question(String subject, Lecture lecture) {
         this.subject = subject;
-        this.correctImagePath = correctImagePath;
         this.lecture = lecture;
     }
 }

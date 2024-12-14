@@ -13,7 +13,13 @@ import project.scanny.services.QuestionService;
 import project.scanny.services.UserQuestionAttemptService;
 import project.scanny.services.UserService;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/attempts")
@@ -21,6 +27,7 @@ public class UserQuestionAttemptController {
     private final UserQuestionAttemptService userQuestionAttemptService;
     private final UserService userService;
     private final QuestionService questionService;
+    private final Path uploadDir = Paths.get("src/main/java/project/scanny/images");
 
     public UserQuestionAttemptController(UserQuestionAttemptService userQuestionAttemptService, UserService userService, QuestionService questionService) {
         this.userQuestionAttemptService = userQuestionAttemptService;
@@ -29,7 +36,7 @@ public class UserQuestionAttemptController {
     }
 
     @PostMapping("/attempt")
-    public ResponseEntity<?> recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) {
+    public ResponseEntity<?> recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
         UserQuestionAttempt userQuestionAttempt = UserQuestionAttemptMapper.toEntity(userQuestionAttemptRequest);
         System.out.println(userQuestionAttempt.getUser().getId());
         User user = userService.findById(userQuestionAttempt.getUser().getId())
@@ -39,6 +46,10 @@ public class UserQuestionAttemptController {
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
         UserQuestionAttempt attempt = userQuestionAttemptService.findByUserAndQuestion(user, question);
+
+        if (!Files.exists(uploadDir)) {
+            Files.createDirectories(uploadDir);
+        }
 
         if (attempt == null) {
             attempt = new UserQuestionAttempt(user, question);
@@ -55,16 +66,31 @@ public class UserQuestionAttemptController {
 
             MultipartFile imageFile = userQuestionAttemptRequest.correctImage();
             if (imageFile != null && !imageFile.isEmpty()) {
-                //String imagePath = imageService.saveImage(imageFile);
-                attempt.setImagePath("imagePath");
+                try {
+                    String imagePath = saveImageLocally(imageFile);
+                    attempt.setImagePath(imagePath);
+                } catch (IOException e) {
+                    return ResponseEntity.status(500).body("Failed to save image: " + e.getMessage());
+                }
             } else {
                 return ResponseEntity.badRequest().body("Image is required when succeeded is true.");
             }
         }
-
         userQuestionAttemptService.save(attempt);
-
         return ResponseEntity.ok("Attempt recorded successfully.");
     }
 
+    private String saveImageLocally(MultipartFile imageFile) throws IOException {
+        String originalFilename = imageFile.getOriginalFilename();
+        String fileExtension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+
+        String filename = UUID.randomUUID().toString() + fileExtension;
+        Path filePath = uploadDir.resolve(filename);
+
+        Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        return filePath.toString();
+    }
 }

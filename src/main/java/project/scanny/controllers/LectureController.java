@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.scanny.dto.LectureDTO;
-import project.scanny.models.Lecture;
 import project.scanny.services.LectureService;
-import project.scanny.services.UserService;
 
 import java.util.Collections;
 import java.util.List;

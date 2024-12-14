@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.scanny.dto.QuestionDTO;
-import project.scanny.models.Question;
 import project.scanny.services.QuestionService;
 
 import java.util.List;
