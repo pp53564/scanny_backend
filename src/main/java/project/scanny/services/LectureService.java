@@ -1,10 +1,11 @@
 package project.scanny.services;
 
 import project.scanny.dto.LectureDTO;
-import project.scanny.models.Lecture;
+import project.scanny.dto.UserLectureDTO;
 
 import java.util.List;
 
 public interface LectureService {
     List<LectureDTO> getAllLectures();
+    List<UserLectureDTO> getAllUserLectures(Long userId);
 }

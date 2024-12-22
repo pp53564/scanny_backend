@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.scanny.configuration.auth.JwtTokenUtil;
 import project.scanny.dto.AuthenticationResponse;
-import project.scanny.dto.UserDTO;
 import project.scanny.mappers.UserMapper;
 import project.scanny.models.User;
 import project.scanny.requests.user.CreateUserRequest;
@@ -35,7 +34,7 @@ public class UserController {
         try {
             User loggedInUser = userService.createOrLoginUser(user);
             String token = jwtTokenUtil.generateToken(loggedInUser.getUsername());
-            return new AuthenticationResponse(token);
+            return new AuthenticationResponse(token, loggedInUser.getId());
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Invalid username or password");
         }

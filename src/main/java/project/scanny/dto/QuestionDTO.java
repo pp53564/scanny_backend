@@ -1,4 +1,4 @@
 package project.scanny.dto;
 
-public record QuestionDTO(Long id, String subject, String correctImagePath) {
+public record QuestionDTO(Long id, String subject) {
 }

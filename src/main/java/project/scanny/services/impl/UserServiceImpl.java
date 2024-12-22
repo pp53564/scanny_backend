@@ -52,9 +52,8 @@ public class UserServiceImpl implements UserService {
             return existingUser;
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            User newUser = userRepository.save(user);
-            log.info("Created new user: {}", newUser);
-            return newUser;
+            //            log.info("Created new user: {}", newUser);
+            return userRepository.save(user);
         }
     }
 }

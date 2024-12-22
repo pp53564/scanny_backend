@@ -36,7 +36,7 @@ public class UserQuestionAttemptController {
     }
 
     @PostMapping("/attempt")
-    public ResponseEntity<?> recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
+    public ResponseEntity<String> recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
         UserQuestionAttempt userQuestionAttempt = UserQuestionAttemptMapper.toEntity(userQuestionAttemptRequest);
         System.out.println(userQuestionAttempt.getUser().getId());
         User user = userService.findById(userQuestionAttempt.getUser().getId())
@@ -87,7 +87,7 @@ public class UserQuestionAttemptController {
             fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
 
-        String filename = UUID.randomUUID().toString() + fileExtension;
+        String filename = UUID.randomUUID() + fileExtension;
         Path filePath = uploadDir.resolve(filename);
 
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
