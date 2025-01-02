@@ -15,9 +15,10 @@ spring:
     application:
         name: scanny
     datasource:
-        url: jdbc:postgresql://dpg-ctpvfkaj1k6c739nmcpg-a.frankfurt-postgres.render.com:5432/scanny
-        username: scanny_user
-        password: KPEIwmQZ8Brh3ifkGkkvbQHJ5x7tZvR1
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${SPRING_DATASOURCE_USERNAME}
+        password: ${SPRING_DATASOURCE_PASSWORD}
+        driver-class-name: org.postgresql.Driver
     jpa:
         hibernate:
             ddl-auto: update
