@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 import project.scanny.dao.UserRepository;
-import project.scanny.models.User;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

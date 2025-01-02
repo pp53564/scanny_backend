@@ -77,7 +77,7 @@ public class UserQuestionAttemptController {
             }
         }
         userQuestionAttemptService.save(attempt);
-        return ResponseEntity.ok("Attempt recorded successfully.");
+        return ResponseEntity.ok().body("Attempt recorded successfully.");
     }
 
     private String saveImageLocally(MultipartFile imageFile) throws IOException {
