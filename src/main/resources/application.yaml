@@ -1,10 +1,23 @@
+#spring:
+#    application:
+#        name: scanny
+#    datasource:
+#        url: jdbc:postgresql://localhost:5433/scanny
+#        username: postgres
+#        password: bazepodataka
+#    jpa:
+#        hibernate:
+#            ddl-auto: update
+#        properties:
+#            hibernate:
+#                dialect: org.hibernate.dialect.PostgreSQLDialect
 spring:
     application:
         name: scanny
     datasource:
-        url: jdbc:postgresql://localhost:5433/scanny
-        username: postgres
-        password: bazepodataka
+        url: jdbc:postgresql://dpg-ctpvfkaj1k6c739nmcpg-a.frankfurt-postgres.render.com:5432/scanny
+        username: scanny_user
+        password: KPEIwmQZ8Brh3ifkGkkvbQHJ5x7tZvR1
     jpa:
         hibernate:
             ddl-auto: update
