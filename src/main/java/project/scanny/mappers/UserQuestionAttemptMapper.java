@@ -1,6 +1,5 @@
 package project.scanny.mappers;
 
-import project.scanny.dto.AttemptDTO;
 import project.scanny.models.Question;
 import project.scanny.models.User;
 import project.scanny.models.UserQuestionAttempt;
@@ -18,7 +17,7 @@ public class UserQuestionAttemptMapper {
         question.setId(request.questionId());
         attempt.setQuestion(question);
 
-        attempt.setSucceeded(request.succeeded());
+//        attempt.setSucceeded(request.succeeded());
         return attempt;
     }
 }

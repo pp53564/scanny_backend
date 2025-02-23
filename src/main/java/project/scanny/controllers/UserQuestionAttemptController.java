@@ -1,9 +1,11 @@
 package project.scanny.controllers;
 
+import com.google.cloud.vision.v1.EntityAnnotation;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import project.scanny.dto.AttemptResponse;
 import project.scanny.mappers.UserQuestionAttemptMapper;
 import project.scanny.models.Question;
 import project.scanny.models.User;
@@ -12,12 +14,14 @@ import project.scanny.requests.question.UserQuestionAttemptRequest;
 import project.scanny.services.QuestionService;
 import project.scanny.services.UserQuestionAttemptService;
 import project.scanny.services.UserService;
+import project.scanny.services.VisionService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -25,20 +29,22 @@ import java.util.UUID;
 @RequestMapping("/api/attempts")
 public class UserQuestionAttemptController {
     private final UserQuestionAttemptService userQuestionAttemptService;
+    private final VisionService visionService;
     private final UserService userService;
     private final QuestionService questionService;
     private final Path uploadDir = Paths.get("src/main/java/project/scanny/images");
 
-    public UserQuestionAttemptController(UserQuestionAttemptService userQuestionAttemptService, UserService userService, QuestionService questionService) {
+    public UserQuestionAttemptController(UserQuestionAttemptService userQuestionAttemptService, VisionService visionService, UserService userService, QuestionService questionService) {
         this.userQuestionAttemptService = userQuestionAttemptService;
+        this.visionService = visionService;
         this.userService = userService;
         this.questionService = questionService;
     }
 
     @PostMapping("/attempt")
-    public ResponseEntity<String> recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
+    public AttemptResponse recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
         UserQuestionAttempt userQuestionAttempt = UserQuestionAttemptMapper.toEntity(userQuestionAttemptRequest);
-        System.out.println(userQuestionAttempt.getUser().getId());
+
         User user = userService.findById(userQuestionAttempt.getUser().getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -56,28 +62,62 @@ public class UserQuestionAttemptController {
             attempt.setAttemptCount(1);
         } else {
             if (attempt.isSucceeded()) {
-                return ResponseEntity.badRequest().body("Question already answered correctly.");
+                return ResponseEntity.badRequest().body(new AttemptResponse(
+                        true, 0, "Question already answered correctly.", ""
+                )).getBody();
             }
             attempt.incrementAttemptCount();
         }
+        if(userQuestionAttemptRequest.correctImage() != null) {
+            List<EntityAnnotation> labels;
+            labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
 
-        if (userQuestionAttemptRequest.succeeded()) {
-            attempt.setSucceeded(true);
+            String correct = question.getSubject().toLowerCase();
+            boolean isCorrect = false;
+            float confidenceScore = 0;
 
-            MultipartFile imageFile = userQuestionAttemptRequest.correctImage();
-            if (imageFile != null && !imageFile.isEmpty()) {
-                try {
-                    String imagePath = saveImageLocally(imageFile);
-                    attempt.setImagePath(imagePath);
-                } catch (IOException e) {
-                    return ResponseEntity.status(500).body("Failed to save image: " + e.getMessage());
+            for(EntityAnnotation entityAnnotation : labels) {
+                if(entityAnnotation.getDescription().equalsIgnoreCase(correct)) {
+                    isCorrect = true;
+                    confidenceScore = entityAnnotation.getScore();
+                    break;
                 }
-            } else {
-                return ResponseEntity.badRequest().body("Image is required when succeeded is true.");
             }
+            if (isCorrect) {
+                attempt.setSucceeded(true);
+
+                MultipartFile imageFile = userQuestionAttemptRequest.correctImage();
+                if (!imageFile.isEmpty()) {
+                    try {
+                        String imagePath = saveImageLocally(imageFile);
+                        attempt.setImagePath(imagePath);
+                    } catch (IOException e) {
+                        return ResponseEntity.status(500).body(new AttemptResponse(
+                                false, 0, "Failed to save image: " + e.getMessage(), ""
+                        )).getBody();
+                    }
+                } else {
+                    return ResponseEntity.badRequest().body(new AttemptResponse(
+                            false, 0, "Image is required when succeeded is true.", ""
+                    )).getBody();
+                }
+            }
+            userQuestionAttemptService.save(attempt);
+            return ResponseEntity.ok(new AttemptResponse(
+                    isCorrect,
+                    confidenceScore,
+                    isCorrect ? "Correct answer!" : "Incorrect answer. Try again.",
+                    isCorrect ? correct : labels.getFirst().getDescription()
+            )).getBody();
+        } else {
+            userQuestionAttemptService.save(attempt);
+            return ResponseEntity.ok(new AttemptResponse(
+                    false,
+                    0,
+                     "No image.",
+                    ""
+            )).getBody();
         }
-        userQuestionAttemptService.save(attempt);
-        return ResponseEntity.ok().body("Attempt recorded successfully.");
     }
 
     private String saveImageLocally(MultipartFile imageFile) throws IOException {
