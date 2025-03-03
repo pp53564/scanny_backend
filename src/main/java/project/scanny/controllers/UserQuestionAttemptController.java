@@ -105,7 +105,7 @@ public class UserQuestionAttemptController {
             userQuestionAttemptService.save(attempt);
             return ResponseEntity.ok(new AttemptResponse(
                     isCorrect,
-                    confidenceScore,
+                    isCorrect ? confidenceScore : labels.getFirst().getScore(),
                     isCorrect ? "Correct answer!" : "Incorrect answer. Try again.",
                     isCorrect ? correct : labels.getFirst().getDescription()
             )).getBody();
