@@ -8,4 +8,5 @@ import java.util.List;
 public interface LectureService {
     List<LectureDTO> getAllLectures();
     List<UserLectureDTO> getAllUserLectures(Long userId);
+    List<UserLectureDTO> getAllUserLanguageLectures(Long userId, String selectedLangCode);
 }

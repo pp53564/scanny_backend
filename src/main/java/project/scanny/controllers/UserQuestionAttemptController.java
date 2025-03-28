@@ -69,10 +69,11 @@ public class UserQuestionAttemptController {
             attempt.incrementAttemptCount();
         }
         if(userQuestionAttemptRequest.correctImage() != null) {
-            List<EntityAnnotation> labels;
-            labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
+            List<EntityAnnotation> labels = List.of();
+//            labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
 
-            String correct = question.getSubject().toLowerCase();
+
+            String correct = question.getBaseSubject().toLowerCase();
             boolean isCorrect = false;
             float confidenceScore = 0;
 

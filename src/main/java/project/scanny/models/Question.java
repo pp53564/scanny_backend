@@ -15,7 +15,10 @@ public class Question {
     private Long id;
 
     @Column(nullable = false)
-    private String subject;
+    private String baseSubject;
+
+    @Column(nullable = false)
+    private String localizedSubject;
 
     @ManyToOne
     @JoinColumn(name = "lecture_id", nullable = false)
@@ -28,8 +31,9 @@ public class Question {
 
     public Question() {}
 
-    public Question(String subject, Lecture lecture) {
-        this.subject = subject;
+    public Question(String baseSubject, Lecture lecture, String localizedSubject) {
+        this.baseSubject = baseSubject;
+        this.localizedSubject = localizedSubject;
         this.lecture = lecture;
     }
 }

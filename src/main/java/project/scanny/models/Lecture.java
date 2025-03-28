@@ -16,13 +16,17 @@ public class Lecture {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String languageCode;
+
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Question> questions;
 
     public Lecture() {}
 
-    public Lecture(String title) {
+    public Lecture(String title, String languageCode) {
         this.title = title;
+        this.languageCode = languageCode;
     }
 }

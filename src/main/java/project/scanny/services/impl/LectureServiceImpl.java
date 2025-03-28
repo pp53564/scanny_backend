@@ -46,6 +46,21 @@ public class LectureServiceImpl implements LectureService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserLectureDTO> getAllUserLanguageLectures(Long userId, String selectedLangCode) {
+        return lectureRepository.findAll().stream()
+                .filter(lecture -> lecture.getLanguageCode().equals(selectedLangCode))
+                .map(lecture -> {
+                    boolean allQuestionsSucceeded = areAllQuestionsAnswered(lecture.getId(), userId);
+                    return new UserLectureDTO(
+                            lecture.getId(),
+                            lecture.getTitle(),
+                            allQuestionsSucceeded
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
     private boolean areAllQuestionsAnswered(Long lectureId, Long userId) {
         var lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new IllegalArgumentException("Lecture not found"));
