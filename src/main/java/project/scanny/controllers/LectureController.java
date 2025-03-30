@@ -58,9 +58,8 @@ public class LectureController {
     }
 
     @GetMapping("/user/{selectedLangCode}")
-    public ResponseEntity<List<UserLectureDTO>> getAllUserLectures(@PathVariable String selectedLangCode) {
+    public ResponseEntity<List<UserLectureDTO>> getAllUserLangLectures(@PathVariable String selectedLangCode) {
         try {
-            System.out.println("tuu");
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
             User user = userService.findByUsername(username)

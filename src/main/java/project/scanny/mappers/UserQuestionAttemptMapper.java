@@ -16,6 +16,7 @@ public class UserQuestionAttemptMapper {
         Question question = new Question();
         question.setId(request.questionId());
         attempt.setQuestion(question);
+        attempt.setLanguageCode(request.langCode());
 
 //        attempt.setSucceeded(request.succeeded());
         return attempt;

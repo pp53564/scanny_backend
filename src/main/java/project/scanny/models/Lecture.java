@@ -3,11 +3,14 @@ package project.scanny.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
 import java.util.List;
 
 @Entity
 @Table(name = "lectures")
 @Data
+@ToString(exclude = {"questions"})
 public class Lecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +19,8 @@ public class Lecture {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String languageCode;
+//    @Column(nullable = false)
+//    private String languageCode;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -25,8 +28,7 @@ public class Lecture {
 
     public Lecture() {}
 
-    public Lecture(String title, String languageCode) {
+    public Lecture(String title) {
         this.title = title;
-        this.languageCode = languageCode;
     }
 }

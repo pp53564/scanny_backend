@@ -6,6 +6,7 @@ import project.scanny.dao.LectureRepository;
 import project.scanny.dto.LectureDTO;
 import project.scanny.dto.UserLectureDTO;
 import project.scanny.mappers.LectureMapper;
+import project.scanny.models.Lecture;
 import project.scanny.models.Question;
 import project.scanny.models.UserQuestionAttempt;
 import project.scanny.services.LectureService;
@@ -35,7 +36,6 @@ public class LectureServiceImpl implements LectureService {
     public List<UserLectureDTO> getAllUserLectures(Long userId) {
         return lectureRepository.findAll().stream()
                 .map(lecture -> {
-                    // For each lecture, determine if all questions are answered
                     boolean allQuestionsSucceeded = areAllQuestionsAnswered(lecture.getId(), userId);
                     return new UserLectureDTO(
                             lecture.getId(),
@@ -49,9 +49,8 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public List<UserLectureDTO> getAllUserLanguageLectures(Long userId, String selectedLangCode) {
         return lectureRepository.findAll().stream()
-                .filter(lecture -> lecture.getLanguageCode().equals(selectedLangCode))
                 .map(lecture -> {
-                    boolean allQuestionsSucceeded = areAllQuestionsAnswered(lecture.getId(), userId);
+                    boolean allQuestionsSucceeded = areAllQuestionsAnsweredLang(lecture, userId, selectedLangCode);
                     return new UserLectureDTO(
                             lecture.getId(),
                             lecture.getTitle(),
@@ -76,5 +75,23 @@ public class LectureServiceImpl implements LectureService {
 
         return answeredQuestionIds.containsAll(questionIds);
     }
+
+    private boolean areAllQuestionsAnsweredLang(Lecture lecture, Long userId, String langCode) {
+        List<Long> questionIds = lecture.getQuestions()
+                .stream()
+                .map(Question::getId)
+                .toList();
+
+        var userAttempts = userQuestionAttemptService
+                .findByUserAndQuestionIdsAndLang(userId, questionIds, langCode);
+
+        var answeredQuestionIds = userAttempts.stream()
+                .filter(UserQuestionAttempt::isSucceeded)
+                .map(attempt -> attempt.getQuestion().getId())
+                .collect(Collectors.toSet());
+
+        return answeredQuestionIds.containsAll(questionIds);
+    }
+
 }
 

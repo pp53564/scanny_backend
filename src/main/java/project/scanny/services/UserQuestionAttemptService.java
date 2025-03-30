@@ -10,5 +10,6 @@ public interface UserQuestionAttemptService {
     UserQuestionAttempt findByUserAndQuestion(User user, Question question);
     List<UserQuestionAttempt> findByUserAndQuestionIds(Long userId, List<Long> questionIds);
     void save(UserQuestionAttempt attempt);
-
+     List<UserQuestionAttempt> findByUserAndQuestionIdsAndLang(Long userId, List<Long> questionIds, String languageCode);
+     UserQuestionAttempt findByUserAndQuestionAndLang(User User, Question question, String languageCode);
 }

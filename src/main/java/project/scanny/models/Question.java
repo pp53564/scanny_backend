@@ -3,12 +3,14 @@ package project.scanny.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Table(name = "questions")
 @Data
+@ToString(exclude = {"attempts"})
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +18,6 @@ public class Question {
 
     @Column(nullable = false)
     private String baseSubject;
-
-    @Column(nullable = false)
-    private String localizedSubject;
 
     @ManyToOne
     @JoinColumn(name = "lecture_id", nullable = false)
@@ -31,9 +30,8 @@ public class Question {
 
     public Question() {}
 
-    public Question(String baseSubject, Lecture lecture, String localizedSubject) {
+    public Question(String baseSubject, Lecture lecture) {
         this.baseSubject = baseSubject;
-        this.localizedSubject = localizedSubject;
         this.lecture = lecture;
     }
 }

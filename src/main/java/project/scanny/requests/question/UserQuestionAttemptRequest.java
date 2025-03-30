@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 public record UserQuestionAttemptRequest(
         @NotNull Long userId,
         @NotNull Long questionId,
-        MultipartFile correctImage
+        MultipartFile correctImage,
+        String langCode
 ) {
 }

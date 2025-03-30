@@ -29,7 +29,7 @@ public class QuestionMapper {
         boolean succeeded = Optional.ofNullable(attempt).map(UserQuestionAttempt::isSucceeded).orElse(false);
         int attemptCount = Optional.ofNullable(attempt).map(UserQuestionAttempt::getAttemptCount).orElse(0);
 
-        return new UserQuestionDTO(question.getId(), question.getBaseSubject(),question.getLocalizedSubject(), succeeded, attemptCount);
+        return new UserQuestionDTO(question.getId(), question.getBaseSubject(), succeeded, attemptCount);
     }
 
 }

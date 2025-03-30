@@ -29,4 +29,18 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
     public void save(UserQuestionAttempt attempt) {
         userQuestionAttemptRepository.save(attempt);
     }
+
+    public List<UserQuestionAttempt> findByUserAndQuestionIdsAndLang(
+            Long userId,
+            List<Long> questionIds,
+            String languageCode
+    ) {
+        return userQuestionAttemptRepository.findByUserQuestionIdsAndLang(userId, questionIds, languageCode);
+    }
+
+    @Override
+    public UserQuestionAttempt findByUserAndQuestionAndLang(User User, Question question, String languageCode) {
+        return userQuestionAttemptRepository.findByUserAndQuestionAndLanguageCode(User, question, languageCode);
+    }
+
 }

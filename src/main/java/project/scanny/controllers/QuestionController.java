@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.scanny.dto.QuestionDTO;
 import project.scanny.dto.UserQuestionDTO;
+import project.scanny.dto.UserQuestionLangDTO;
 import project.scanny.models.User;
 import project.scanny.services.QuestionService;
 import project.scanny.services.UserService;
@@ -48,6 +49,20 @@ public class QuestionController {
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
             List<UserQuestionDTO> userQuestions = questionService.getUserQuestionsByLectureId(lectureId, user.getId());
+            return ResponseEntity.ok(userQuestions);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+    @GetMapping("/lecture/{lectureId}/user/{langCode}")
+    public ResponseEntity<List<UserQuestionLangDTO>> getUserQuestionsByLecture(@PathVariable Long lectureId, @PathVariable String langCode) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            List<UserQuestionLangDTO> userQuestions = questionService.getUserQuestionsByLectureIdAndLang(lectureId, user.getId(), langCode);
             return ResponseEntity.ok(userQuestions);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
