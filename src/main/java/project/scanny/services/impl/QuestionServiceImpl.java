@@ -12,6 +12,7 @@ import project.scanny.models.UserQuestionAttempt;
 import project.scanny.services.QuestionService;
 import project.scanny.services.UserQuestionAttemptService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,6 +57,8 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions = questionRepository.findByLectureId(lectureId);
         List<Long> questionIds = questions.stream().map(Question::getId).toList();
 
+        Collections.shuffle(questions);
+
         List<UserQuestionAttempt> attempts = userQuestionAttemptService
                 .findByUserAndQuestionIdsAndLang(userId, questionIds, langCode);
 
@@ -65,7 +68,6 @@ public class QuestionServiceImpl implements QuestionService {
                 ));
 
 
-        System.out.println(attemptsByQuestion);
         return questions.stream().map(question -> {
             String baseWord = question.getBaseSubject();
             String localizedWord = wordTranslationService.getTranslation(baseWord, langCode);
