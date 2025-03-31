@@ -3,6 +3,8 @@ package project.scanny.controllers;
 import com.google.cloud.vision.v1.EntityAnnotation;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.scanny.dto.AttemptResponse;
@@ -45,7 +47,12 @@ public class UserQuestionAttemptController {
     public AttemptResponse recordAttempt(@ModelAttribute UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
         UserQuestionAttempt userQuestionAttempt = UserQuestionAttemptMapper.toEntity(userQuestionAttemptRequest);
 
-        User user = userService.findById(userQuestionAttempt.getUser().getId())
+//        User user = userService.findById(userQuestionAttempt.getUser().getId())
+//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         Question question = questionService.findById(userQuestionAttemptRequest.questionId())

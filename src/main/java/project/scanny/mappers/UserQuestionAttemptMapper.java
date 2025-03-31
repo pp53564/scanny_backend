@@ -10,7 +10,6 @@ public class UserQuestionAttemptMapper {
         UserQuestionAttempt attempt = new UserQuestionAttempt();
 
         User user = new User();
-        user.setId(request.userId());
         attempt.setUser(user);
 
         Question question = new Question();
