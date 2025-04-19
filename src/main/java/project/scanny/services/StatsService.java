@@ -1,10 +1,13 @@
 package project.scanny.services;
 
-import org.springframework.data.repository.query.Param;
+import project.scanny.dto.NeighborDTO;
 import project.scanny.dto.StatsPerUserAndLanguageDTO;
+import project.scanny.models.User;
 
 import java.util.List;
 
 public interface StatsService {
-    List<StatsPerUserAndLanguageDTO> getStatsPerUserAndLanguages(Long userId);
+    List<StatsPerUserAndLanguageDTO> getStatsPerUserAndLanguages(User user);
+
+    List<NeighborDTO> getNeighborsForLanguage(User user, String selectedLangCode);
 }

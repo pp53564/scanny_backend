@@ -42,5 +42,4 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
     public UserQuestionAttempt findByUserAndQuestionAndLang(User User, Question question, String languageCode) {
         return userQuestionAttemptRepository.findByUserAndQuestionAndLanguageCode(User, question, languageCode);
     }
-
 }

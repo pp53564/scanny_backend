@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.scanny.dto.QuestionDTO;
+import project.scanny.dto.NeighborDTO;
 import project.scanny.dto.StatsPerUserAndLanguageDTO;
 import project.scanny.models.User;
 import project.scanny.services.StatsService;
@@ -34,7 +34,17 @@ public class StatsController {
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        return ResponseEntity.ok(statsService.getStatsPerUserAndLanguages(user.getId()));
+        return ResponseEntity.ok(statsService.getStatsPerUserAndLanguages(user));
+    }
+
+    @GetMapping("/user/{selectedLangCode}")
+    public ResponseEntity<List<NeighborDTO>> getNeighborsForLanguage(@PathVariable String selectedLangCode) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        return ResponseEntity.ok(statsService.getNeighborsForLanguage(user, selectedLangCode));
     }
 
 }

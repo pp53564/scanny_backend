@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.scanny.dto.AnsweredQuestionDTO;
 import project.scanny.dto.QuestionDTO;
 import project.scanny.dto.UserQuestionDTO;
 import project.scanny.dto.UserQuestionLangDTO;
@@ -68,5 +69,25 @@ public class QuestionController {
             return ResponseEntity.internalServerError().body(null);
         }
     }
+
+    @GetMapping("/answered/{questionId}/{langCode}")
+    public ResponseEntity<AnsweredQuestionDTO> getSuccessfulQuestionPreview(@PathVariable Long questionId, @PathVariable String langCode) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            AnsweredQuestionDTO preview = questionService.findSuccessfulAttempt(user, questionId, langCode);
+            return ResponseEntity.ok(preview);
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 
 }

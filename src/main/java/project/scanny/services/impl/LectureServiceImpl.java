@@ -12,6 +12,7 @@ import project.scanny.models.UserQuestionAttempt;
 import project.scanny.services.LectureService;
 import project.scanny.services.UserQuestionAttemptService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,16 +49,23 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public List<UserLectureDTO> getAllUserLanguageLectures(Long userId, String selectedLangCode) {
-        return lectureRepository.findAll().stream()
+
+        List<UserLectureDTO> list = new java.util.ArrayList<>(lectureRepository.findAll().stream()
                 .map(lecture -> {
-                    boolean allQuestionsSucceeded = areAllQuestionsAnsweredLang(lecture, userId, selectedLangCode);
+                    boolean done = areAllQuestionsAnsweredLang(lecture, userId, selectedLangCode);
                     return new UserLectureDTO(
                             lecture.getId(),
                             lecture.getTitle(),
-                            allQuestionsSucceeded
+                            done
                     );
                 })
-                .collect(Collectors.toList());
+                .toList());
+
+        /* optional: shuffle so items are random inside each bucket */
+//        Collections.shuffle(list);
+        list.sort(Comparator.comparing(UserLectureDTO::allQuestionsSucceeded));
+
+        return list;
     }
 
     private boolean areAllQuestionsAnswered(Long lectureId, Long userId) {

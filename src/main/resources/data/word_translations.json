@@ -16,5 +16,11 @@
     "de": "hund",
     "fr": "chien",
     "it": "cane"
+  },
+  "flooring": {
+    "hr": "pod",
+    "de": "boden",
+    "fr": "plancher",
+    "it": "pavimento"
   }
 }

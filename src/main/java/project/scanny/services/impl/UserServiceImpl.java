@@ -2,13 +2,13 @@ package project.scanny.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.scanny.dao.UserRepository;
+import project.scanny.dto.ChangePasswordRequest;
 import project.scanny.models.User;
 import project.scanny.services.UserService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
@@ -25,19 +25,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(@Valid @NotNull User user) {
-        User savedUser = userRepository.save(user);
-        log.info("Created user: {}", savedUser);
-        return savedUser;
-    }
-    @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public Optional<User> findById(Long userId) {
-        return userRepository.findById(userId);
     }
 
     @Override
@@ -52,8 +41,21 @@ public class UserServiceImpl implements UserService {
             return existingUser;
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            //            log.info("Created new user: {}", newUser);
             return userRepository.save(user);
         }
     }
+
+    @Override
+    public void changePassword(String username, ChangePasswordRequest request) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Invalid old password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
 }

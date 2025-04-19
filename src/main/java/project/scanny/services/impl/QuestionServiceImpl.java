@@ -1,21 +1,25 @@
 package project.scanny.services.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.scanny.dao.QuestionRepository;
+import project.scanny.dto.AnsweredQuestionDTO;
 import project.scanny.dto.QuestionDTO;
 import project.scanny.dto.UserQuestionDTO;
 import project.scanny.dto.UserQuestionLangDTO;
 import project.scanny.mappers.QuestionMapper;
 import project.scanny.models.Question;
+import project.scanny.models.User;
 import project.scanny.models.UserQuestionAttempt;
 import project.scanny.services.QuestionService;
 import project.scanny.services.UserQuestionAttemptService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -57,7 +61,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions = questionRepository.findByLectureId(lectureId);
         List<Long> questionIds = questions.stream().map(Question::getId).toList();
 
-        Collections.shuffle(questions);
+//        Collections.shuffle(questions);
 
         List<UserQuestionAttempt> attempts = userQuestionAttemptService
                 .findByUserAndQuestionIdsAndLang(userId, questionIds, langCode);
@@ -68,7 +72,7 @@ public class QuestionServiceImpl implements QuestionService {
                 ));
 
 
-        return questions.stream().map(question -> {
+        List<UserQuestionLangDTO> list = new java.util.ArrayList<>(questions.stream().map(question -> {
             String baseWord = question.getBaseSubject();
             String localizedWord = wordTranslationService.getTranslation(baseWord, langCode);
 
@@ -85,11 +89,31 @@ public class QuestionServiceImpl implements QuestionService {
                     succeeded,
                     attemptCount
             );
-        }).toList();
+        }).toList());
+        Collections.shuffle(list);
+        list.sort(Comparator.comparing(UserQuestionLangDTO::succeeded));
+        return list;
     }
 
     @Override
     public Optional<Question> findById(Long questionId) {
         return questionRepository.findById(questionId);
     }
+
+    @Override
+    public AnsweredQuestionDTO findSuccessfulAttempt(User user, Long questionId, String langCode) {
+        Question question = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
+        UserQuestionAttempt attempt = userQuestionAttemptService.findByUserAndQuestionAndLang(user, question, langCode);
+
+        String questionText = wordTranslationService.getTranslation(attempt.getQuestion().getBaseSubject(),langCode);
+        Path imgPath = Paths.get(attempt.getImagePath());
+        byte[] bytes;
+        try {
+            bytes = Files.readAllBytes(imgPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new AnsweredQuestionDTO(questionText, bytes);
+    }
+
 }

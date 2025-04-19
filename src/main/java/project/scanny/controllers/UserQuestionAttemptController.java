@@ -82,16 +82,16 @@ public class UserQuestionAttemptController {
         }
         if(userQuestionAttemptRequest.correctImage() != null) {
             List<EntityAnnotation> labels = List.of();
-//            labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
+            labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
 
             String correct = question.getBaseSubject().toLowerCase();
             boolean isCorrect = false;
             float confidenceScore = 0;
 
-            for(EntityAnnotation entityAnnotation : labels) {
-                if(entityAnnotation.getDescription().equalsIgnoreCase(correct)) {
+            for(EntityAnnotation label : labels) {
+                if(label.getDescription().equalsIgnoreCase(correct)) {
                     isCorrect = true;
-                    confidenceScore = entityAnnotation.getScore();
+                    confidenceScore = label.getScore();
                     break;
                 }
             }
@@ -115,17 +115,17 @@ public class UserQuestionAttemptController {
                 }
             }
             userQuestionAttemptService.save(attempt);
-//            return ResponseEntity.ok(new AttemptResponse(
-//                    isCorrect,
-//                    isCorrect ? confidenceScore : labels.getFirst().getScore(),
-//                    isCorrect ? "Correct answer!" : "Incorrect answer. Try again.",
-//                    isCorrect ? correct : labels.getFirst().getDescription()
-//            )).getBody();
             return ResponseEntity.ok(new AttemptResponse(
                     isCorrect,
-                   0,
-                   "Incorrect answer. Try again.", ""
+                    isCorrect ? confidenceScore : labels.getFirst().getScore(),
+                    isCorrect ? "Correct answer!" : "Incorrect answer. Try again.",
+                    isCorrect ? correct : labels.getFirst().getDescription()
             )).getBody();
+//            return ResponseEntity.ok(new AttemptResponse(
+//                    isCorrect,
+//                   0,
+//                   "Incorrect answer. Try again.", ""
+//            )).getBody();
         } else {
             userQuestionAttemptService.save(attempt);
             return ResponseEntity.ok(new AttemptResponse(
