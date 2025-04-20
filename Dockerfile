@@ -55,7 +55,7 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar /app/
 
 # Expose the port your app runs on
-EXPOSE 8080
+#EXPOSE 8080
 
 # Start the app (auto-detect JAR if there's only one)
 ENTRYPOINT ["sh", "-c", "java -jar /app/*.jar"]

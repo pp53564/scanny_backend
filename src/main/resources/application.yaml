@@ -27,4 +27,5 @@ spring:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
         open-in-view: false
 server:
-    port: 8080
+    port: ${PORT:8080}
+
