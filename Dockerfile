@@ -7,11 +7,6 @@ WORKDIR /app
 # Copy the project files to the container
 COPY . .
 
-# Copy built JAR and credentials
-COPY --from=build /app/build/libs/*.jar app.jar
-COPY src/main/resources/credentials/vision-service-account.json ./credentials/vision-service-account.json
-
-
 #not sure if i need this
 RUN chmod +x ./gradlew && ./gradlew clean build -x test
 
