@@ -44,3 +44,13 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.getByName<Jar>("jar") {
+	enabled = false
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+	enabled = true
+	archiveFileName.set("app.jar")
+}
+
