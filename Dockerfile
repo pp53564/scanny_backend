@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the project files to the container
 COPY . .
 
+#not sure if i need this
+RUN chmod +x ./gradlew && ./gradlew clean build -x test
+
 # Run Gradle to build the application
 RUN ./gradlew clean build -x test
 
