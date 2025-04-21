@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.scanny.services.VisionService;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,17 @@ public class VisionServiceImpl implements VisionService {
 //                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
 //                .build();
 //    }
+//public VisionServiceImpl() throws IOException {
+//    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+//            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//    this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//            .setCredentialsProvider(() -> credentials)
+//            .build();
+//}
 public VisionServiceImpl() throws IOException {
-    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+    String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
+    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
             .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
     this.visionSettings = ImageAnnotatorSettings.newBuilder()
