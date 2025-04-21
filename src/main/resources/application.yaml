@@ -28,4 +28,7 @@ spring:
         open-in-view: false
 server:
     port: ${PORT:8080}
-
+logging:
+    level:
+        project.scanny: DEBUG
+        org.springframework: INFO

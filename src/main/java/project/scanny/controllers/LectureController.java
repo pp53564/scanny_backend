@@ -57,13 +57,33 @@ public class LectureController {
         }
     }
 
+//    @GetMapping("/user/{selectedLangCode}")
+//    public ResponseEntity<List<UserLectureDTO>> getAllUserLangLectures(@PathVariable String selectedLangCode) {
+//        try {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            String username = authentication.getName();
+//            User user = userService.findByUsername(username)
+//                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+//
+//            List<UserLectureDTO> lectures = lectureService.getAllUserLanguageLectures(user.getId(), selectedLangCode);
+//            return ResponseEntity.ok(lectures);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Collections.emptyList());
+//        }
+//    }
+
     @GetMapping("/user/{selectedLangCode}")
     public ResponseEntity<List<UserLectureDTO>> getAllUserLangLectures(@PathVariable String selectedLangCode) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
+            System.out.println("AUTH USERNAME: " + username);
+
             User user = userService.findByUsername(username)
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            System.out.println("USER ID: " + user.getId());
 
             List<UserLectureDTO> lectures = lectureService.getAllUserLanguageLectures(user.getId(), selectedLangCode);
             return ResponseEntity.ok(lectures);
@@ -72,4 +92,5 @@ public class LectureController {
                     .body(Collections.emptyList());
         }
     }
+
 }

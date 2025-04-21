@@ -42,5 +42,5 @@ target/
 credentials/
 
 src/main/resources/credentials/*.json
-
+.env
 
