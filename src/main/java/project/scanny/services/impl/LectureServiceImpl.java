@@ -1,5 +1,6 @@
 package project.scanny.services.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.scanny.dao.LectureRepository;
@@ -47,6 +48,7 @@ public class LectureServiceImpl implements LectureService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public List<UserLectureDTO> getAllUserLanguageLectures(Long userId, String selectedLangCode) {
         List<UserLectureDTO> list = new java.util.ArrayList<>(lectureRepository.findAll().stream()
