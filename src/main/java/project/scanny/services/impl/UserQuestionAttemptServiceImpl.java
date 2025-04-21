@@ -9,7 +9,6 @@ import project.scanny.dao.UserQuestionAttemptRepository;
 import project.scanny.dto.AttemptResponse;
 import project.scanny.exceptions.AlreadyAnsweredException;
 import project.scanny.exceptions.EmptyImageException;
-import project.scanny.exceptions.ImageStorageException;
 import project.scanny.mappers.UserQuestionAttemptMapper;
 import project.scanny.models.Question;
 import project.scanny.models.User;
@@ -84,11 +83,6 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
             Files.createDirectories(uploadDir);
         }
 
-        MultipartFile img = userQuestionAttemptRequest.correctImage();
-        if (img == null || img.isEmpty()) {
-            throw new EmptyImageException("Image is empty.");
-        }
-
         if (attempt == null) {
             attempt = new UserQuestionAttempt();
             attempt.setUser(user);
@@ -118,12 +112,28 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
 
         if (isCorrect) {
             attempt.setSucceeded(true);
-            try {
-                attempt.setImagePath(saveImageLocally(img));
-            } catch (IOException e) {
-                throw new ImageStorageException("Failed to save image");
+
+            MultipartFile imageFile = userQuestionAttemptRequest.correctImage();
+            if (!imageFile.isEmpty()) {
+                try {
+                    String imagePath = saveImageLocally(imageFile);
+                    attempt.setImagePath(imagePath);
+                } catch (IOException e) {
+                    throw new EmptyImageException("Failed to save image.");
+                }
+            } else {
+                throw new EmptyImageException("Image is required when succeeded is true.");
             }
         }
+
+//        if (isCorrect) {
+//            attempt.setSucceeded(true);
+//            try {
+//                attempt.setImagePath(saveImageLocally(img));
+//            } catch (IOException e) {
+//                throw new ImageStorageException("Failed to save image");
+//            }
+//        }
 
         userQuestionAttemptRepository.save(attempt);
         return new AttemptResponse(
