@@ -36,11 +36,7 @@ class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/lectures/**",
-                                "/api/questions/**",
-                                "/api/stats/**",
-                                "/users/**",
-                                "/api/attempts/**").permitAll()
+                                "/users").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

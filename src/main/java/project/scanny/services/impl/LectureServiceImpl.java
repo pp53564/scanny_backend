@@ -49,7 +49,6 @@ public class LectureServiceImpl implements LectureService {
 
     @Override
     public List<UserLectureDTO> getAllUserLanguageLectures(Long userId, String selectedLangCode) {
-
         List<UserLectureDTO> list = new java.util.ArrayList<>(lectureRepository.findAll().stream()
                 .map(lecture -> {
                     boolean done = areAllQuestionsAnsweredLang(lecture, userId, selectedLangCode);
@@ -60,9 +59,6 @@ public class LectureServiceImpl implements LectureService {
                     );
                 })
                 .toList());
-
-        /* optional: shuffle so items are random inside each bucket */
-//        Collections.shuffle(list);
         list.sort(Comparator.comparing(UserLectureDTO::allQuestionsSucceeded));
 
         return list;
