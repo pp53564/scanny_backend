@@ -29,23 +29,23 @@ public class VisionServiceImpl implements VisionService {
 //                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
 //                .build();
 //    }
-//public VisionServiceImpl() throws IOException {
-//    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
-//            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-//
-//    this.visionSettings = ImageAnnotatorSettings.newBuilder()
-//            .setCredentialsProvider(() -> credentials)
-//            .build();
-//}
 public VisionServiceImpl() throws IOException {
-    String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
-    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
             .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
     this.visionSettings = ImageAnnotatorSettings.newBuilder()
             .setCredentialsProvider(() -> credentials)
             .build();
 }
+//public VisionServiceImpl() throws IOException {
+//    String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
+//    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+//            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//    this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//            .setCredentialsProvider(() -> credentials)
+//            .build();
+//}
 
     public List<EntityAnnotation> detectLabels(MultipartFile file) throws IOException {
         List<EntityAnnotation> labels = new ArrayList<>();
