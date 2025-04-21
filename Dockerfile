@@ -32,8 +32,8 @@
 # -------------------
 # Build stage
 # -------------------
-FROM eclipse-temurin:21-jdk-alpine AS build
-
+#FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:21-jre  AS build
 # Set working directory
 WORKDIR /app
 
