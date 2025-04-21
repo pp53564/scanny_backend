@@ -7,15 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 import project.scanny.dao.QuestionRepository;
 import project.scanny.dao.UserQuestionAttemptRepository;
 import project.scanny.dto.AttemptResponse;
-import project.scanny.exceptions.AlreadyAnsweredException;
-import project.scanny.exceptions.EmptyImageException;
 import project.scanny.mappers.UserQuestionAttemptMapper;
 import project.scanny.models.Question;
 import project.scanny.models.User;
 import project.scanny.models.UserQuestionAttempt;
 import project.scanny.requests.question.UserQuestionAttemptRequest;
 import project.scanny.services.UserQuestionAttemptService;
-import project.scanny.services.UserService;
 import project.scanny.services.VisionService;
 
 import java.io.IOException;
@@ -30,14 +27,12 @@ import java.util.UUID;
 public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptService {
     private final UserQuestionAttemptRepository userQuestionAttemptRepository;
     private final VisionService visionService;
-    private final UserService userService;
     private final QuestionRepository questionRepository;
     private final Path uploadDir = Paths.get("src/main/java/project/scanny/images");
 
-    public UserQuestionAttemptServiceImpl(UserQuestionAttemptRepository userQuestionAttemptRepository, VisionService visionService, UserService userService, QuestionRepository questionRepository) {
+    public UserQuestionAttemptServiceImpl(UserQuestionAttemptRepository userQuestionAttemptRepository, VisionService visionService, QuestionRepository questionRepository) {
         this.userQuestionAttemptRepository = userQuestionAttemptRepository;
         this.visionService = visionService;
-        this.userService = userService;
         this.questionRepository = questionRepository;
     }
 
@@ -68,7 +63,7 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
     }
 
     @Override
-    public AttemptResponse processAttempt(User user, UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
+    public AttemptResponse processAttempt(User user, UserQuestionAttemptRequest userQuestionAttemptRequest) throws Exception {
         Question question = questionRepository.findById(userQuestionAttemptRequest.questionId())
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
@@ -90,64 +85,59 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
             attempt.setAttemptCount(1);
             attempt.setLanguageCode(languageCode);
         } else {
-            if (attempt.isSucceeded()) {
-                throw new AlreadyAnsweredException("Question already answered correctly.");
-            }
             attempt.incrementAttemptCount();
         }
-        List<EntityAnnotation> labels = List.of();
-        labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
 
-        String correct = question.getBaseSubject().toLowerCase();
-        boolean isCorrect = false;
-        float confidenceScore = 0;
+        MultipartFile imageFile = userQuestionAttemptRequest.correctImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            List<EntityAnnotation> labels;
+            labels = visionService.detectLabels(userQuestionAttemptRequest.correctImage());
 
-        for(EntityAnnotation label : labels) {
-            if(label.getDescription().equalsIgnoreCase(correct)) {
-                isCorrect = true;
-                confidenceScore = label.getScore();
-                break;
+            String correct = question.getBaseSubject().toLowerCase();
+            boolean isCorrect = false;
+            float confidenceScore = 0;
+
+            for(EntityAnnotation label : labels) {
+                if(label.getDescription().equalsIgnoreCase(correct)) {
+                    isCorrect = true;
+                    confidenceScore = label.getScore();
+                    break;
+                }
             }
-        }
-
-        if (isCorrect) {
-            attempt.setSucceeded(true);
-
-            MultipartFile imageFile = userQuestionAttemptRequest.correctImage();
-            if (!imageFile.isEmpty()) {
-                try {
+            if (isCorrect) {
+                attempt.setSucceeded(true);
+                if (!imageFile.isEmpty()) {
                     String imagePath = saveImageLocally(imageFile);
                     attempt.setImagePath(imagePath);
-                } catch (IOException e) {
-                    throw new EmptyImageException("Failed to save image.");
                 }
-            } else {
-                throw new EmptyImageException("Image is required when succeeded is true.");
             }
+
+            userQuestionAttemptRepository.save(attempt);
+
+            String message;
+            if (isCorrect) {
+                message = "Correct answer!";
+            } else if (imageFile.isEmpty()) {
+                message = "No image provided.";
+            } else {
+                message = "Incorrect answer. Try again.";
+            }
+
+            return new AttemptResponse(
+                    isCorrect,
+                    isCorrect ? confidenceScore : labels.getFirst().getScore(),
+                    message,
+                    isCorrect ? correct : labels.getFirst().getDescription()
+            );
+        } else {
+            userQuestionAttemptRepository.save(attempt);
+            return new AttemptResponse(
+                    false,
+                    0,
+                    "No image.",
+                    ""
+            );
         }
-
-//        if (isCorrect) {
-//            attempt.setSucceeded(true);
-//            try {
-//                attempt.setImagePath(saveImageLocally(img));
-//            } catch (IOException e) {
-//                throw new ImageStorageException("Failed to save image");
-//            }
-//        }
-
-        userQuestionAttemptRepository.save(attempt);
-        return new AttemptResponse(
-                isCorrect,
-                isCorrect ? confidenceScore : labels.getFirst().getScore(),
-                isCorrect ? "Correct answer!" : "Incorrect answer. Try again.",
-                isCorrect ? correct : labels.getFirst().getDescription()
-        );
-//            return ResponseEntity.ok(new AttemptResponse(
-//                    isCorrect,
-//                   0,
-//                   "Incorrect answer. Try again.", ""
-//            )).getBody();
-
     }
 
     private String saveImageLocally(MultipartFile imageFile) throws IOException {

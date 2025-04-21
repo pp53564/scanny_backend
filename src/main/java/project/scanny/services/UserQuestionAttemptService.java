@@ -6,7 +6,6 @@ import project.scanny.models.User;
 import project.scanny.models.UserQuestionAttempt;
 import project.scanny.requests.question.UserQuestionAttemptRequest;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface UserQuestionAttemptService {
@@ -15,5 +14,5 @@ public interface UserQuestionAttemptService {
     void save(UserQuestionAttempt attempt);
      List<UserQuestionAttempt> findByUserAndQuestionIdsAndLang(Long userId, List<Long> questionIds, String languageCode);
      UserQuestionAttempt findByUserAndQuestionAndLang(User User, Question question, String languageCode);
-    AttemptResponse processAttempt(User user, UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException;
+    AttemptResponse processAttempt(User user, UserQuestionAttemptRequest userQuestionAttemptRequest) throws Exception;
 }
