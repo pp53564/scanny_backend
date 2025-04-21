@@ -15,5 +15,5 @@ public interface UserQuestionAttemptService {
     void save(UserQuestionAttempt attempt);
      List<UserQuestionAttempt> findByUserAndQuestionIdsAndLang(Long userId, List<Long> questionIds, String languageCode);
      UserQuestionAttempt findByUserAndQuestionAndLang(User User, Question question, String languageCode);
-    AttemptResponse processAttempt(String name, UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException;
+    AttemptResponse processAttempt(User user, UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException;
 }

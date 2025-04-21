@@ -69,10 +69,7 @@ public class UserQuestionAttemptServiceImpl implements UserQuestionAttemptServic
     }
 
     @Override
-    public AttemptResponse processAttempt(String username, UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
+    public AttemptResponse processAttempt(User user, UserQuestionAttemptRequest userQuestionAttemptRequest) throws IOException {
         Question question = questionRepository.findById(userQuestionAttemptRequest.questionId())
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
