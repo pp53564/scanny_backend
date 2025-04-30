@@ -12,15 +12,17 @@ public class StatsPerUserAndLanguageDTO {
     private double score;
     private int rank;
     private int totalUsersInLang;
+    private long totalQuestions;
 
     public StatsPerUserAndLanguageDTO(String languageCode, long correctAnswers,
                                       long attemptSum, double score,
-                                      int rank, int totalUsersInLang) {
+                                      int rank, int totalUsersInLang, long totalQuestions) {
         this.languageCode = languageCode;
         this.correctAnswers = correctAnswers;
         this.attemptSum = attemptSum;
         this.score = score;
         this.rank = rank;
         this.totalUsersInLang = totalUsersInLang;
+        this.totalQuestions = totalQuestions;
     }
 }

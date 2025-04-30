@@ -2,6 +2,7 @@ package project.scanny.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import project.scanny.dao.QuestionRepository;
 import project.scanny.dao.UserQuestionAttemptRepository;
 import project.scanny.dao.UserRepository;
 import project.scanny.dto.NeighborDTO;
@@ -19,10 +20,12 @@ public class StatsServiceImpl implements StatsService {
 
     private final UserQuestionAttemptRepository userQuestionAttemptRepository;
     private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
 
-    public StatsServiceImpl(UserQuestionAttemptRepository userQuestionAttemptRepository, UserRepository userRepository) {
+    public StatsServiceImpl(UserQuestionAttemptRepository userQuestionAttemptRepository, UserRepository userRepository, QuestionRepository questionRepository) {
         this.userQuestionAttemptRepository = userQuestionAttemptRepository;
         this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
     }
 
     @Override
@@ -31,6 +34,8 @@ public class StatsServiceImpl implements StatsService {
         if (allAttempts.isEmpty()) {
             return Collections.emptyList();
         }
+
+        long totalQuestions = questionRepository.count();
 
         Map<String, List<UserQuestionAttempt>> attemptsByLanguage = allAttempts.stream()
                 .collect(Collectors.groupingBy(UserQuestionAttempt::getLanguageCode));
@@ -55,7 +60,8 @@ public class StatsServiceImpl implements StatsService {
                         userStat.attemptSum,
                         userStat.score,
                         userStat.rank,
-                        rankedStats.size()
+                        rankedStats.size(),
+                        totalQuestions
                 );
                 result.add(dto);
             }
@@ -163,22 +169,6 @@ public class StatsServiceImpl implements StatsService {
         long attemptSum = 0;
         double score = 0.0;
 
-//        for (UserQuestionAttempt ua : attempts) {
-//            attemptSum += ua.getAttemptCount();
-//            if (ua.isSucceeded()) {
-//                correctAnswers++;
-//                score += 2;
-//                score -= (ua.getAttemptCount() - 1);
-//            } else {
-//                score -= ua.getAttemptCount();
-//            }
-//        }
-//
-//        int score = 0;
-//        int correctAnswers = 0;
-//        int attemptSum = 0;
-//
-//// You can tweak these values as you like:
         final int BASE_SCORE = 10;
         final int PENALTY_PER_EXTRA_ATTEMPT = 2;
         final int FAILURE_PENALTY = 2;
