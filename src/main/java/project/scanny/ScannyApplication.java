@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableJpaRepositories
-//@EnableTransactionManagement
+@EnableTransactionManagement
 public class ScannyApplication {
 
 	public static void main(String[] args) {

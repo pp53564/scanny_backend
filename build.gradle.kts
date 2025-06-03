@@ -35,6 +35,7 @@ dependencies {
 //	implementation ("com.google.cloud:google-cloud-vision:3.17.0")
 	implementation("com.google.cloud:google-cloud-vision:3.17.0")
 	implementation("io.netty:netty-tcnative-boringssl-static:2.0.61.Final")
+
 }
 
 //allOpen {

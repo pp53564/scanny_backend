@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@Table(name = "lectures")
+@Table(name = "lectures", uniqueConstraints = @UniqueConstraint(columnNames = "title"))
 @Data
 @ToString(exclude = {"questions"})
 public class Lecture {

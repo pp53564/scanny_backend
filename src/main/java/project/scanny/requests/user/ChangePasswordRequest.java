@@ -1,4 +1,4 @@
-package project.scanny.dto;
+package project.scanny.requests.user;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,0 +1,40 @@
+{
+  "banana" : {
+    "hr" : "banana",
+    "de" : "Banane",
+    "fr" : "banane",
+    "it" : "banana"
+  },
+  "apple" : {
+    "hr" : "jabuka",
+    "de" : "Apfel",
+    "fr" : "pomme",
+    "it" : "mela"
+  },
+  "plate" : {
+    "en" : "plate",
+    "de" : "teller",
+    "hr" : "tanjur",
+    "it" : "piatto",
+    "fr" : "plaque"
+  },
+  "flooring" : {
+    "hr" : "pod",
+    "de" : "boden",
+    "fr" : "plancher",
+    "it" : "pavimento"
+  },
+  "dog" : {
+    "hr" : "pas",
+    "de" : "hund",
+    "fr" : "chien",
+    "it" : "cane"
+  },
+  "blush" : {
+    "en" : "Blush",
+    "de" : "Erröten",
+    "hr" : "Rumenilo",
+    "it" : "Arrossire",
+    "fr" : "Rougir"
+  }
+}

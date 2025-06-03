@@ -2,12 +2,11 @@ package project.scanny.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.scanny.dao.UserRepository;
-import project.scanny.dto.ChangePasswordRequest;
 import project.scanny.models.User;
+import project.scanny.models.enums.Role;
 import project.scanny.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
@@ -41,21 +40,9 @@ public class UserServiceImpl implements UserService {
             return existingUser;
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(Role.USER);
             return userRepository.save(user);
         }
-    }
-
-    @Override
-    public void changePassword(String username, ChangePasswordRequest request) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid old password");
-        }
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
     }
 
 }

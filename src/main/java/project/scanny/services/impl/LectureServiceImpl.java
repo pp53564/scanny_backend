@@ -2,14 +2,18 @@ package project.scanny.services.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import project.scanny.dao.LectureRepository;
+import project.scanny.dto.LectureCreatedDto;
 import project.scanny.dto.LectureDTO;
 import project.scanny.dto.UserLectureDTO;
 import project.scanny.mappers.LectureMapper;
 import project.scanny.models.Lecture;
 import project.scanny.models.Question;
 import project.scanny.models.UserQuestionAttempt;
+import project.scanny.requests.lecture.CreateLectureRequest;
 import project.scanny.services.LectureService;
 import project.scanny.services.UserQuestionAttemptService;
 
@@ -22,10 +26,12 @@ import java.util.stream.Collectors;
 public class LectureServiceImpl implements LectureService {
     private final LectureRepository lectureRepository;
     private final UserQuestionAttemptService userQuestionAttemptService;
+    private final WordTranslationService wordTranslationService;
 
-    public LectureServiceImpl(LectureRepository lectureRepository, UserQuestionAttemptService userQuestionAttemptService) {
+    public LectureServiceImpl(LectureRepository lectureRepository, UserQuestionAttemptService userQuestionAttemptService, WordTranslationService wordTranslationService) {
         this.lectureRepository = lectureRepository;
         this.userQuestionAttemptService = userQuestionAttemptService;
+        this.wordTranslationService = wordTranslationService;
     }
 
     public List<LectureDTO> getAllLectures() {
@@ -64,6 +70,24 @@ public class LectureServiceImpl implements LectureService {
         list.sort(Comparator.comparing(UserLectureDTO::allQuestionsSucceeded));
 
         return list;
+    }
+
+    @Override
+    public LectureCreatedDto createLecture(CreateLectureRequest createLectureRequest, Long id) {
+        if(lectureRepository.existsByTitleIgnoreCase(createLectureRequest.lectureName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Lecture name '" + createLectureRequest.lectureName() + "' is already in use."
+            );
+        }
+        Lecture lecture = LectureMapper.toEntity(createLectureRequest);
+        createLectureRequest.items().forEach(wordTranslationService::upsertTranslation);
+        lectureRepository.save(lecture);
+
+        return new LectureCreatedDto(
+                lecture.getId(),
+                "Lecture successfully created."
+        );
     }
 
     private boolean areAllQuestionsAnswered(Long lectureId, Long userId) {

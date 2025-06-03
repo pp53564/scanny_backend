@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import project.scanny.models.enums.Role;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -25,9 +25,13 @@ public class User implements UserDetails {
     @Column(nullable = false, name = "password")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return List.of(role);
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -39,4 +43,10 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
     }
+    public User(String username, String password, Role role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
 }

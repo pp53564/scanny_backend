@@ -1,7 +1,9 @@
 package project.scanny.mappers;
 
 import project.scanny.dto.QuestionDTO;
+import project.scanny.dto.TranslatedItemDto;
 import project.scanny.dto.UserQuestionDTO;
+import project.scanny.models.Lecture;
 import project.scanny.models.Question;
 import project.scanny.models.UserQuestionAttempt;
 
@@ -30,6 +32,13 @@ public class QuestionMapper {
         int attemptCount = Optional.ofNullable(attempt).map(UserQuestionAttempt::getAttemptCount).orElse(0);
 
         return new UserQuestionDTO(question.getId(), question.getBaseSubject(), succeeded, attemptCount);
+    }
+
+    public static Question toEntity(TranslatedItemDto itemDto, Lecture lecture) {
+        return new Question(
+                itemDto.translations().get("en"),
+                lecture
+        );
     }
 
 }

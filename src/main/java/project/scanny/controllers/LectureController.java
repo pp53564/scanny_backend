@@ -4,12 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import project.scanny.requests.lecture.CreateLectureRequest;
+import project.scanny.dto.LectureCreatedDto;
 import project.scanny.dto.LectureDTO;
 import project.scanny.dto.UserLectureDTO;
 import project.scanny.models.User;
@@ -70,6 +71,30 @@ public class LectureController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.emptyList());
+        }
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping("/teacher/createLecture")
+    public ResponseEntity<LectureCreatedDto> createLecture(@RequestBody CreateLectureRequest createLectureRequest) {
+//        System.out.println("createLectureRequest: " + createLectureRequest);
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(new LectureCreatedDto("Successfully created a lecture"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User teacher = userService.findByUsername(auth.getName())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        try {
+            LectureCreatedDto dto = lectureService.createLecture(createLectureRequest, teacher.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode().value())
+                    .body(null);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

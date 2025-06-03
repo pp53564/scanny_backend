@@ -1,5 +1,6 @@
 package project.scanny.services.impl;
 
+import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
@@ -19,24 +20,24 @@ public class VisionServiceImpl implements VisionService {
 
     private final ImageAnnotatorSettings visionSettings;
 
-//    public VisionServiceImpl() throws IOException {
-//        String keyPath = "src/main/resources/credentials/vision-service-account.json";
-//
-//        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath))
-//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-//
-//        this.visionSettings = ImageAnnotatorSettings.newBuilder()
-//                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-//                .build();
-//    }
-public VisionServiceImpl() throws IOException {
-    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
-            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+    public VisionServiceImpl() throws IOException {
+        String keyPath = "src/main/resources/credentials/vision-service-account.json";
 
-    this.visionSettings = ImageAnnotatorSettings.newBuilder()
-            .setCredentialsProvider(() -> credentials)
-            .build();
-}
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath))
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+
+        this.visionSettings = ImageAnnotatorSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build();
+    }
+//public VisionServiceImpl() throws IOException {
+//    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+//            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//    this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//            .setCredentialsProvider(() -> credentials)
+//            .build();
+//}
 //public VisionServiceImpl() throws IOException {
 //    String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
 //    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
