@@ -38,25 +38,36 @@ public class VisionServiceImpl implements VisionService {
 //                .setCredentialsProvider(() -> credentials)
 //                .build();
 //    }
-    public VisionServiceImpl() {
-        String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
-        GoogleCredentials credentials = null;
-        try {
-            credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
-                    .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//    public VisionServiceImpl() {
+//        String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
+//        GoogleCredentials credentials = null;
+//        try {
+//            credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+//                    .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        GoogleCredentials finalCredentials = credentials;
+//        try {
+//            this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//                    .setCredentialsProvider(() -> finalCredentials)
+//                    .build();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-        GoogleCredentials finalCredentials = credentials;
-        try {
-            this.visionSettings = ImageAnnotatorSettings.newBuilder()
-                    .setCredentialsProvider(() -> finalCredentials)
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public VisionServiceImpl() throws IOException {
+        GoogleCredentials credentials = GoogleCredentials
+                .getApplicationDefault()
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+
+        this.visionSettings = ImageAnnotatorSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build();
     }
+
 
     public List<EntityAnnotation> detectLabels(MultipartFile file) throws IOException {
         List<EntityAnnotation> labels = new ArrayList<>();
