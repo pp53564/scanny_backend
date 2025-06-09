@@ -79,5 +79,6 @@ RUN ./gradlew --no-daemon clean bootJar -x test
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=builder /workspace/build/libs/app.jar ./app.jar
+COPY --from=builder /workspace/data/word_translations.json ./data/word_translations.json
 
 ENTRYPOINT ["java","-jar","app.jar"]
