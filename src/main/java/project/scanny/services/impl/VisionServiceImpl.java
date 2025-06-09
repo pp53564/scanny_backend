@@ -38,14 +38,24 @@ public class VisionServiceImpl implements VisionService {
 //                .setCredentialsProvider(() -> credentials)
 //                .build();
 //    }
-    public VisionServiceImpl() throws IOException {
+    public VisionServiceImpl() {
         String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+        GoogleCredentials credentials = null;
+        try {
+            credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+                    .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        this.visionSettings = ImageAnnotatorSettings.newBuilder()
-                .setCredentialsProvider(() -> credentials)
-                .build();
+        GoogleCredentials finalCredentials = credentials;
+        try {
+            this.visionSettings = ImageAnnotatorSettings.newBuilder()
+                    .setCredentialsProvider(() -> finalCredentials)
+                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<EntityAnnotation> detectLabels(MultipartFile file) throws IOException {
