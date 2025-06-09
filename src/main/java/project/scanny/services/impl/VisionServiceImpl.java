@@ -20,33 +20,33 @@ public class VisionServiceImpl implements VisionService {
 
     private final ImageAnnotatorSettings visionSettings;
 
+//    public VisionServiceImpl() throws IOException {
+//        String keyPath = "src/main/resources/credentials/vision-service-account.json";
+//
+//        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath))
+//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//        this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+//                .build();
+//    }
+//    public VisionServiceImpl() throws IOException {
+//        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//        this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//                .setCredentialsProvider(() -> credentials)
+//                .build();
+//    }
     public VisionServiceImpl() throws IOException {
-        String keyPath = "src/main/resources/credentials/vision-service-account.json";
-
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath))
+        String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
                 .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
         this.visionSettings = ImageAnnotatorSettings.newBuilder()
-                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .setCredentialsProvider(() -> credentials)
                 .build();
     }
-//public VisionServiceImpl() throws IOException {
-//    GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
-//            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-//
-//    this.visionSettings = ImageAnnotatorSettings.newBuilder()
-//            .setCredentialsProvider(() -> credentials)
-//            .build();
-//}
-//public VisionServiceImpl() throws IOException {
-//    String credentialsPath = "/secrets/vision/scanny-secret-vision-api";
-//    GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
-//            .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-//
-//    this.visionSettings = ImageAnnotatorSettings.newBuilder()
-//            .setCredentialsProvider(() -> credentials)
-//            .build();
-//}
 
     public List<EntityAnnotation> detectLabels(MultipartFile file) throws IOException {
         List<EntityAnnotation> labels = new ArrayList<>();
