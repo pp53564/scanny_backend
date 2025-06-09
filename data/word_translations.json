@@ -11,13 +11,6 @@
     "fr" : "pomme",
     "it" : "mela"
   },
-  "plate" : {
-    "en" : "plate",
-    "de" : "teller",
-    "hr" : "tanjur",
-    "it" : "piatto",
-    "fr" : "plaque"
-  },
   "flooring" : {
     "hr" : "pod",
     "de" : "boden",
@@ -36,5 +29,329 @@
     "hr" : "Rumenilo",
     "it" : "Arrossire",
     "fr" : "Rougir"
+  },
+  "plate": {
+    "hr": "tanjur",
+    "de": "teller",
+    "fr": "assiette",
+    "it": "piatto"
+  },
+  "fork": {
+    "hr": "vilica",
+    "de": "gabel",
+    "fr": "fourchette",
+    "it": "forchetta"
+  },
+  "knife": {
+    "hr": "nož",
+    "de": "messer",
+    "fr": "couteau",
+    "it": "coltello"
+  },
+  "glass": {
+    "hr": "čaša",
+    "de": "glas",
+    "fr": "verre",
+    "it": "bicchiere"
+  },
+  "cutting board": {
+    "hr": "daska za rezanje",
+    "de": "schneidebrett",
+    "fr": "planche à découper",
+    "it": "tagliere"
+  },
+  "pan": {
+    "hr": "tava",
+    "de": "pfanne",
+    "fr": "poêle",
+    "it": "padella"
+  },
+  "mixer": {
+    "hr": "mikser",
+    "de": "mixer",
+    "fr": "mixeur",
+    "it": "frullatore"
+  },
+  "soap": {
+    "hr": "sapun",
+    "de": "seife",
+    "fr": "savon",
+    "it": "sapone"
+  },
+  "toothbrush": {
+    "hr": "četkica za zube",
+    "de": "zahnbürste",
+    "fr": "brosse à dents",
+    "it": "spazzolino da denti"
+  },
+  "towel": {
+    "hr": "ručnik",
+    "de": "handtuch",
+    "fr": "serviette",
+    "it": "asciugamano"
+  },
+  "mirror": {
+    "hr": "ogledalo",
+    "de": "spiegel",
+    "fr": "miroir",
+    "it": "specchio"
+  },
+  "shampoo": {
+    "hr": "šampon",
+    "de": "shampoo",
+    "fr": "shampooing",
+    "it": "shampoo"
+  },
+  "toilet bowl": {
+    "hr": "wc školjka",
+    "de": "wc-schüssel",
+    "fr": "cuvette de WC",
+    "it": "vaso sanitario"
+  },
+  "shower": {
+    "hr": "tuš",
+    "de": "dusche",
+    "fr": "douche",
+    "it": "doccia"
+  },
+  "t-shirt": {
+    "hr": "majica",
+    "de": "t-shirt",
+    "fr": "t-shirt",
+    "it": "t-shirt"
+  },
+  "pants": {
+    "hr": "hlače",
+    "de": "hose",
+    "fr": "pantalon",
+    "it": "pantaloni"
+  },
+  "socks": {
+    "hr": "čarape",
+    "de": "socken",
+    "fr": "chaussettes",
+    "it": "calzini"
+  },
+  "cap": {
+    "hr": "kapa",
+    "de": "mütze",
+    "fr": "casquette",
+    "it": "cappellino"
+  },
+  "shoes": {
+    "hr": "cipele",
+    "de": "schuhe",
+    "fr": "chaussures",
+    "it": "scarpe"
+  },
+  "scarf": {
+    "hr": "šal",
+    "de": "schal",
+    "fr": "écharpe",
+    "it": "sciarpa"
+  },
+  "gloves": {
+    "hr": "rukavice",
+    "de": "handschuhe",
+    "fr": "gants",
+    "it": "guanti"
+  },
+  "carrot": {
+    "hr": "mrkva",
+    "de": "karotte",
+    "fr": "carotte",
+    "it": "carota"
+  },
+  "tomato": {
+    "hr": "rajčica",
+    "de": "tomate",
+    "fr": "tomate",
+    "it": "pomodoro"
+  },
+  "pepper": {
+    "hr": "paprika",
+    "de": "paprika",
+    "fr": "poivron",
+    "it": "peperone"
+  },
+  "cucumber": {
+    "hr": "krastavac",
+    "de": "gurke",
+    "fr": "concombre",
+    "it": "cetriolo"
+  },
+  "potato": {
+    "hr": "krumpir",
+    "de": "kartoffel",
+    "fr": "pomme de terre",
+    "it": "patata"
+  },
+  "table": {
+    "hr": "stol",
+    "de": "tisch",
+    "fr": "table",
+    "it": "tavolo"
+  },
+  "chair": {
+    "hr": "stolica",
+    "de": "stuhl",
+    "fr": "chaise",
+    "it": "sedia"
+  },
+  "bed": {
+    "hr": "krevet",
+    "de": "bett",
+    "fr": "lit",
+    "it": "letto"
+  },
+  "wardrobe": {
+    "hr": "ormar",
+    "de": "kleiderschrank",
+    "fr": "armoire",
+    "it": "armadio"
+  },
+  "sofa": {
+    "hr": "sofa",
+    "de": "sofa",
+    "fr": "canapé",
+    "it": "divano"
+  },
+  "lamp": {
+    "hr": "lampa",
+    "de": "lampe",
+    "fr": "lampe",
+    "it": "lampada"
+  },
+  "shelf": {
+    "hr": "polica",
+    "de": "regal",
+    "fr": "étagère",
+    "it": "mensola"
+  },
+  "hammer": {
+    "hr": "čekić",
+    "de": "hammer",
+    "fr": "marteau",
+    "it": "martello"
+  },
+  "screwdriver": {
+    "hr": "odvijač",
+    "de": "schraubendreher",
+    "fr": "tournevis",
+    "it": "cacciavite"
+  },
+  "pliers": {
+    "hr": "kliješta",
+    "de": "zange",
+    "fr": "pince",
+    "it": "pinze"
+  },
+  "saw": {
+    "hr": "pila",
+    "de": "säge",
+    "fr": "scie",
+    "it": "sega"
+  },
+  "measuring tape": {
+    "hr": "mjerač",
+    "de": "maßband",
+    "fr": "ruban à mesurer",
+    "it": "metro a nastro"
+  },
+  "glue": {
+    "hr": "ljepilo",
+    "de": "kleber",
+    "fr": "colle",
+    "it": "colla"
+  },
+  "grinder": {
+    "hr": "brusilica",
+    "de": "schleifmaschine",
+    "fr": "meuleuse",
+    "it": "smerigliatrice"
+  },
+  "ball": {
+    "hr": "lopta",
+    "de": "ball",
+    "fr": "ballon",
+    "it": "palla"
+  },
+  "stuffed toy": {
+    "hr": "plišana igračka",
+    "de": "stofftier",
+    "fr": "peluche",
+    "it": "peluche"
+  },
+  "puzzle": {
+    "hr": "puzzle",
+    "de": "puzzle",
+    "fr": "puzzle",
+    "it": "puzzle"
+  },
+  "lego bricks": {
+    "hr": "lego kocke",
+    "de": "lego-bausteine",
+    "fr": "briques lego",
+    "it": "mattoncini lego"
+  },
+  "toy car": {
+    "hr": "autić",
+    "de": "spielzeugauto",
+    "fr": "voiture jouet",
+    "it": "macchinina"
+  },
+  "doll": {
+    "hr": "lutka",
+    "de": "puppe",
+    "fr": "poupée",
+    "it": "bambola"
+  },
+  "board game": {
+    "hr": "društvena igra",
+    "de": "brettspiel",
+    "fr": "jeu de société",
+    "it": "gioco da tavolo"
+  },
+  "shovel": {
+    "hr": "lopata",
+    "de": "schaufel",
+    "fr": "pelle",
+    "it": "pala"
+  },
+  "rake": {
+    "hr": "grablje",
+    "de": "harke",
+    "fr": "râteau",
+    "it": "rastrello"
+  },
+  "watering can": {
+    "hr": "kanta za zalijevanje",
+    "de": "gießkanne",
+    "fr": "arrosoir",
+    "it": "annaffiatoio"
+  },
+  "flowers": {
+    "hr": "cvijeće",
+    "de": "blumen",
+    "fr": "fleurs",
+    "it": "fiori"
+  },
+  "pot": {
+    "hr": "lonac",
+    "de": "topf",
+    "fr": "pot",
+    "it": "vaso"
+  },
+  "grass": {
+    "hr": "trava",
+    "de": "gras",
+    "fr": "herbe",
+    "it": "erba"
+  },
+  "pebbles": {
+    "hr": "kamenčići",
+    "de": "kieselsteine",
+    "fr": "cailloux",
+    "it": "ciottoli"
   }
 }
