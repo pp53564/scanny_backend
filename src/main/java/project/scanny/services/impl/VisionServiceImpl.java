@@ -20,16 +20,16 @@ public class VisionServiceImpl implements VisionService {
 
     private final ImageAnnotatorSettings visionSettings;
 
-//    public VisionServiceImpl() throws IOException {
-//        String keyPath = "src/main/resources/credentials/vision-service-account.json";
-//
-//        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath))
-//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-//
-//        this.visionSettings = ImageAnnotatorSettings.newBuilder()
-//                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-//                .build();
-//    }
+    public VisionServiceImpl() throws IOException {
+        String keyPath = "src/main/resources/credentials/vision-service-account.json";
+
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath))
+                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+
+        this.visionSettings = ImageAnnotatorSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build();
+    }
 //    public VisionServiceImpl() throws IOException {
 //        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
 //                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
@@ -58,15 +58,15 @@ public class VisionServiceImpl implements VisionService {
 //        }
 //    }
 
-    public VisionServiceImpl() throws IOException {
-        GoogleCredentials credentials = GoogleCredentials
-                .getApplicationDefault()
-                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
-
-        this.visionSettings = ImageAnnotatorSettings.newBuilder()
-                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-                .build();
-    }
+//    public VisionServiceImpl() throws IOException {
+//        GoogleCredentials credentials = GoogleCredentials
+//                .getApplicationDefault()
+//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//        this.visionSettings = ImageAnnotatorSettings.newBuilder()
+//                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+//                .build();
+//    }
 
 
     public List<EntityAnnotation> detectLabels(MultipartFile file) throws IOException {
@@ -80,6 +80,7 @@ public class VisionServiceImpl implements VisionService {
 
             Feature feature = Feature.newBuilder()
                     .setType(Feature.Type.LABEL_DETECTION)
+                    .setMaxResults(30)
                     .build();
 
             AnnotateImageRequest request = AnnotateImageRequest.newBuilder()
